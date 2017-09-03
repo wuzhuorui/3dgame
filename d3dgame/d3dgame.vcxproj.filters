@@ -13,5 +13,33 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="d3dapp">
+      <UniqueIdentifier>{d51709b4-bbd6-4b65-b775-99cf73636656}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common">
+      <UniqueIdentifier>{b320ccff-32ff-4a5d-90f8-94e589a86731}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\timer">
+      <UniqueIdentifier>{4341eabe-7a54-44bf-a8e1-14fd6bc1e732}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="d3dapp\d3dapp.h">
+      <Filter>d3dapp</Filter>
+    </ClInclude>
+    <ClInclude Include="common\timer\gametimer.h">
+      <Filter>common\timer</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="d3dapp\d3dapp.cpp">
+      <Filter>d3dapp</Filter>
+    </ClCompile>
+    <ClCompile Include="common\timer\gametiemr.cpp">
+      <Filter>common\timer</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
