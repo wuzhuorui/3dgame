@@ -7,7 +7,9 @@
 //***************************************************************************************
 
 #include "d3dapp/d3dApp.h"
+#include "common\debug\debug.h"
 #include<cassert>
+#include<xnamath.h>
 class InitDirect3DApp : public D3DApp
 {
 public:
@@ -27,7 +29,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 #if defined(DEBUG) | defined(_DEBUG)
 	_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
 #endif
-
+	AllocConsole();
+	freopen("CONOUT$", "w", stdout);
+	GlobalDebug->loginfo(std::cout,std::string("123"));
 	InitDirect3DApp theApp(hInstance);
 	
 	if( !theApp.Init() )

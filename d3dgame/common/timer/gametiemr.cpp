@@ -65,7 +65,7 @@ void GameTimer::Start()
 		mPausedTime += (startTime - mStopTime);
 		mPrevTime = startTime;
 		mStopTime = 0;
-		mStopped = true;
+		mStopped = false;
 	}
 }
 

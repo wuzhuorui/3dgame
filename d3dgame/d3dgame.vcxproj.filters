@@ -22,6 +22,9 @@
     <Filter Include="common\timer">
       <UniqueIdentifier>{4341eabe-7a54-44bf-a8e1-14fd6bc1e732}</UniqueIdentifier>
     </Filter>
+    <Filter Include="common\debug">
+      <UniqueIdentifier>{00a0a4fd-bd27-4d7f-b24e-1181ec2e62d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="d3dapp\d3dapp.h">
@@ -29,6 +32,9 @@
     </ClInclude>
     <ClInclude Include="common\timer\gametimer.h">
       <Filter>common\timer</Filter>
+    </ClInclude>
+    <ClInclude Include="common\debug\debug.h">
+      <Filter>common\debug</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -40,6 +46,9 @@
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="common\debug\debug.cpp">
+      <Filter>common\debug</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
