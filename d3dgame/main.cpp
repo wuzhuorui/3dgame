@@ -9,7 +9,8 @@
 #include "d3dapp/d3dApp.h"
 #include "common\debug\debug.h"
 #include<cassert>
-#include<xnamath.h>
+#include"common\math\vec4.h"
+#include"common\math\mat4.h"
 class InitDirect3DApp : public D3DApp
 {
 public:
@@ -31,7 +32,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 #endif
 	AllocConsole();
 	freopen("CONOUT$", "w", stdout);
-	GlobalDebug->loginfo(std::cout,std::string("123"));
+	mat4<double> p(Vec4<double>(1, 0, 0, 0), Vec4<double>(0, 1, 0, 0), Vec4<double>(0, 0, 1, 0), Vec4<double>(3, 4, 5, 1));
+
+	GlobalDebug->loginfo(Vec4d(0,0,0,1)*p);
 	InitDirect3DApp theApp(hInstance);
 	
 	if( !theApp.Init() )

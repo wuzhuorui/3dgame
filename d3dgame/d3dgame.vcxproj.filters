@@ -25,6 +25,9 @@
     <Filter Include="common\debug">
       <UniqueIdentifier>{00a0a4fd-bd27-4d7f-b24e-1181ec2e62d7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="common\math">
+      <UniqueIdentifier>{05bf206e-8aff-499c-a1c8-16b26040919f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="d3dapp\d3dapp.h">
@@ -35,6 +38,12 @@
     </ClInclude>
     <ClInclude Include="common\debug\debug.h">
       <Filter>common\debug</Filter>
+    </ClInclude>
+    <ClInclude Include="common\math\vec4.h">
+      <Filter>common\math</Filter>
+    </ClInclude>
+    <ClInclude Include="common\math\mat4.h">
+      <Filter>common\math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -49,6 +58,9 @@
     </ClCompile>
     <ClCompile Include="common\debug\debug.cpp">
       <Filter>common\debug</Filter>
+    </ClCompile>
+    <ClCompile Include="common\math\vec4.cpp">
+      <Filter>common\math</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

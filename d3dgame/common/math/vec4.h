@@ -75,13 +75,18 @@ public:
 		out << "x = " << right.x() << " y = " << right.y() << " z = " << right.z() << " w =" << right.w() << std::endl;
 		return out;
 	}
-
+	const T& operator[] (int index) const{ 
+		return v[index]; }
+	T& operator[](int index)
+	{
+		return v[index];
+	}
 private:
 	const T& x()const { return v[0]; };
 	const T& y()const { return v[1]; };
 	const T& z()const { return v[2]; };
 	const T& w()const { return v[3]; };
-	T v[4];	
+	T v[4];
 };
 
 typedef Vec4<double> Vec4d;
