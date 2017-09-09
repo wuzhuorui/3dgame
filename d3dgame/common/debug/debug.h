@@ -9,7 +9,7 @@ public:
 	virtual  ~Debug();
 
 	template<typename T>
-	void loginfo(std::ostream& output, const T& out) 
+	void loginfo(const T& out,std::ostream& output = std::cout) 
 	{
 		output << out;
 	};
