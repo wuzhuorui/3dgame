@@ -66,6 +66,7 @@ public:
 		return output;
 	}
 	const T* operator[](int index)const { return val[index]; }
+	T* operator[](int index) { return val[index]; }
 private:
 	T val[4][4];
 };

@@ -9,8 +9,8 @@
 #include "d3dapp/d3dApp.h"
 #include "common\debug\debug.h"
 #include<cassert>
-#include"common\math\vec4.h"
-#include"common\math\mat4.h"
+#include"common/math/transform.h"
+#include"common/color/color.h"
 class InitDirect3DApp : public D3DApp
 {
 public:
@@ -33,8 +33,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 	AllocConsole();
 	freopen("CONOUT$", "w", stdout);
 	mat4<double> p(Vec4<double>(1, 0, 0, 0), Vec4<double>(0, 1, 0, 0), Vec4<double>(0, 0, 1, 0), Vec4<double>(3, 4, 5, 1));
-
-	GlobalDebug->loginfo(Vec4d(0,0,0,1)*p);
+	Vec4d x(3, 4, 5, 0);
+	auto p1 = Perspective(pi_unit * 90, 1., 5., 10.);
+	GlobalDebug->loginfo(Colors::Red);
 	InitDirect3DApp theApp(hInstance);
 	
 	if( !theApp.Init() )
@@ -77,6 +78,7 @@ void InitDirect3DApp::DrawScene()
 	float Silver[] = { 1.00f, 0.f, 0.f, 1.0f };
 	md3dImmediateContext->ClearRenderTargetView(mRenderTargetView, reinterpret_cast<const float*>(&Silver));
 	md3dImmediateContext->ClearDepthStencilView(mDepthStencilView, D3D11_CLEAR_DEPTH|D3D11_CLEAR_STENCIL, 1.0f, 0);
+	auto p1 = LookAt(Vec4d(1, 0, 1, 1), Vec4d(0, 0, 0, 1));
 
 	mSwapChain->Present(0, 0);
 }

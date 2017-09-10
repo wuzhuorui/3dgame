@@ -35,7 +35,7 @@ public:
 		Vec4<T> ret(-this->x(), -this->y(), -this->z(), -this->w());
 		return ret;
 	}
-	const Vec4 operator-(const Vec4&right)
+	const Vec4 operator-(const Vec4&right)const
 	{
 		Vec4<T> ret = *this + (-right);
 		return ret;
@@ -52,6 +52,12 @@ public:
 			ret.v[i] = this->v[i] * right;
 		return ret;
 	};
+	const Vec4 normalize() 
+	{
+		T div = 1 / sqrt((double)(v[0] * v[0] + v[1] * v[1] + v[2] * v[2] + v[3] * v[3]));
+		*this = *this*div;
+		return *this;
+	}
 	friend const Vec4 operator*(const T& left, const Vec4& right)
 	{
 		return right*left;
@@ -92,3 +98,5 @@ private:
 typedef Vec4<double> Vec4d;
 typedef Vec4<float>	 Vec4f;
 typedef Vec4<int>    Vec4i;
+
+typedef Vec4f Color4f;

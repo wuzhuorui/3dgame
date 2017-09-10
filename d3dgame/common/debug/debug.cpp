@@ -1,5 +1,4 @@
 #include"debug.h"
-
 std::shared_ptr<Debug> GlobalDebug = Debug::Instance();
 
 std::shared_ptr<Debug> Debug::Instance()

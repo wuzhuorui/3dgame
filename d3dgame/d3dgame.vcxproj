@@ -142,15 +142,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="common\color\color.cpp" />
     <ClCompile Include="common\debug\debug.cpp" />
+    <ClCompile Include="common\math\transform.cpp" />
+    <ClCompile Include="common\math\vec3.cpp" />
     <ClCompile Include="common\math\vec4.cpp" />
     <ClCompile Include="common\timer\gametiemr.cpp" />
     <ClCompile Include="d3dapp\d3dapp.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="common\color\color.h" />
     <ClInclude Include="common\debug\debug.h" />
     <ClInclude Include="common\math\mat4.h" />
+    <ClInclude Include="common\math\transform.h" />
+    <ClInclude Include="common\math\vec2.h" />
+    <ClInclude Include="common\math\vec3.h" />
     <ClInclude Include="common\math\vec4.h" />
     <ClInclude Include="common\timer\gametimer.h" />
     <ClInclude Include="d3dapp\d3dapp.h" />
