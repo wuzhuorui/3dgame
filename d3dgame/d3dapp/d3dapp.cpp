@@ -67,7 +67,7 @@ inline HWND D3DApp::MainWnd()const
 	return mhMainWnd;
 }
 
-inline float D3DApp::AspectRatio()const {
+float D3DApp::AspectRatio()const {
 	return static_cast<float>(mClientWidth / mClientHeight);
 }
 

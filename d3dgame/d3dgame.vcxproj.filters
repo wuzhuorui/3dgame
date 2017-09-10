@@ -31,6 +31,9 @@
     <Filter Include="common\color">
       <UniqueIdentifier>{599a2df0-9b48-4d15-a911-450290578a85}</UniqueIdentifier>
     </Filter>
+    <Filter Include="boxapp">
+      <UniqueIdentifier>{733cb9ef-a48d-4599-afe7-14238914a18e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="d3dapp\d3dapp.h">
@@ -60,6 +63,9 @@
     <ClInclude Include="common\math\vec2.h">
       <Filter>common\math</Filter>
     </ClInclude>
+    <ClInclude Include="boxapp\boxapp.h">
+      <Filter>boxapp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="d3dapp\d3dapp.cpp">
@@ -85,6 +91,9 @@
     </ClCompile>
     <ClCompile Include="common\color\color.cpp">
       <Filter>common\color</Filter>
+    </ClCompile>
+    <ClCompile Include="boxapp\boxapp.cpp">
+      <Filter>boxapp</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -70,3 +70,5 @@ public:
 private:
 	T val[4][4];
 };
+
+typedef mat4<float> mat4f;

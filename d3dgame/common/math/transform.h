@@ -2,8 +2,8 @@
 #include"mat4.h"
 #include<cmath>
 
-extern double pi;
-extern double pi_unit;
+extern float pi;
+extern float pi_unit;
 
 template<typename T>
 const mat4<T> LookAt(const Vec4<T>&pos,const Vec4<T>&target,const Vec4<T>& up = Vec4<T>(0,1,0,0)) 

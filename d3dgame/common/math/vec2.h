@@ -79,9 +79,11 @@ public:
 	{
 		return v[index];
 	}
-private:
+	void SetX(const T& x) { v[0] = x; }
+	void SetY(const T& y) { v[1] = y; }
 	const T& x()const { return v[0]; };
 	const T& y()const { return v[1]; };
+private:
 	T v[2];
 };
 
@@ -91,3 +93,4 @@ typedef Vec2<int>    Vec2i;
 
 typedef Vec2f Point2f;
 typedef Vec2f Dir2f;
+typedef Vec2i Point2i;

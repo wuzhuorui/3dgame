@@ -54,7 +54,7 @@ public:
 	};
 	const Vec4 normalize() 
 	{
-		T div = 1 / sqrt((double)(v[0] * v[0] + v[1] * v[1] + v[2] * v[2] + v[3] * v[3]));
+		T div = 1 / sqrt((T)(v[0] * v[0] + v[1] * v[1] + v[2] * v[2] + v[3] * v[3]));
 		*this = *this*div;
 		return *this;
 	}
@@ -100,3 +100,4 @@ typedef Vec4<float>	 Vec4f;
 typedef Vec4<int>    Vec4i;
 
 typedef Vec4f Color4f;
+typedef Vec4f Point4f;

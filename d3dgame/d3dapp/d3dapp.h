@@ -1,6 +1,8 @@
 #pragma once
 #include<Windowsx.h>
 #include<d3d11.h>
+#include<D3DX11async.h>
+#include<D3Dcompiler.h>
 #include<string>
 #include<memory>
 
