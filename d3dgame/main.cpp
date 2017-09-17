@@ -9,8 +9,8 @@
 #include "d3dapp/d3dApp.h"
 #include "common\debug\debug.h"
 #include<cassert>
-
-#include"boxapp\boxapp.h"
+//#include"boxapp\boxapp.h"
+#include"hillsapp\hillsapp.h"
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 				   PSTR cmdLine, int showCmd)
 {
@@ -22,9 +22,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
 	freopen("CONOUT$", "w", stdout);
 	mat4<double> p(Vec4<double>(1, 0, 0, 0), Vec4<double>(0, 1, 0, 0), Vec4<double>(0, 0, 1, 0), Vec4<double>(3, 4, 5, 1));
 	Vec4d x(3, 4, 5, 0);
-	GlobalDebug->loginfo(Colors::Red);
-	BoxApp theApp(hInstance);
-	
+	HillsApp theApp(hInstance);
+	//BoxApp theApp(hInstance);
 	if( !theApp.Init() )
 		return 0;
 	

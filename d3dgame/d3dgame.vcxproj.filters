@@ -34,6 +34,15 @@
     <Filter Include="boxapp">
       <UniqueIdentifier>{733cb9ef-a48d-4599-afe7-14238914a18e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="common\lua">
+      <UniqueIdentifier>{c1d744af-09ab-48a6-bd76-6d5ce9167a38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="hillsapp">
+      <UniqueIdentifier>{1f149852-da07-4504-9e35-e46a7717ee07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common\utils">
+      <UniqueIdentifier>{1574b91f-cb8f-454e-b9a0-e6c8a45cd8ed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="d3dapp\d3dapp.h">
@@ -66,6 +75,18 @@
     <ClInclude Include="boxapp\boxapp.h">
       <Filter>boxapp</Filter>
     </ClInclude>
+    <ClInclude Include="common\lua\luabase.h">
+      <Filter>common\lua</Filter>
+    </ClInclude>
+    <ClInclude Include="hillsapp\hillsapp.h">
+      <Filter>hillsapp</Filter>
+    </ClInclude>
+    <ClInclude Include="common\utils\utils.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="GeometryGenerator\GeometryGenerator.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="d3dapp\d3dapp.cpp">
@@ -94,6 +115,18 @@
     </ClCompile>
     <ClCompile Include="boxapp\boxapp.cpp">
       <Filter>boxapp</Filter>
+    </ClCompile>
+    <ClCompile Include="common\lua\luabase.cpp">
+      <Filter>common\lua</Filter>
+    </ClCompile>
+    <ClCompile Include="hillsapp\hillsapp.cpp">
+      <Filter>hillsapp</Filter>
+    </ClCompile>
+    <ClCompile Include="common\utils\utils.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="GeometryGenerator\GeometryGenerator.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

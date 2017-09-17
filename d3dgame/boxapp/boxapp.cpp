@@ -50,7 +50,6 @@ void BoxApp::BuildGeometryBuffers()
 		{ Point3f(+1.0f, +1.0f, +1.0f),Colors::Cyan },
 		{ Point3f(+1.0f, -1.0f, +1.0f),Colors::Magenta }
 	};
-
 	D3D11_BUFFER_DESC vbd;
 	vbd.Usage = D3D11_USAGE_IMMUTABLE;
 	vbd.ByteWidth = sizeof(Vertex) * 8;
@@ -59,7 +58,7 @@ void BoxApp::BuildGeometryBuffers()
 	vbd.MiscFlags = 0;
 	vbd.StructureByteStride = 0;
 	D3D11_SUBRESOURCE_DATA vinitData;
-	vinitData.pSysMem = vertices;
+	vinitData.pSysMem = &vertices[0];
 	assert(md3dDevice->CreateBuffer(&vbd, &vinitData, &mBoxVB) == S_OK);
 
 	// Create the index buffer
@@ -154,7 +153,7 @@ void BoxApp::OnResize()
 	D3DApp::OnResize();
 
 	// The window resized, so update the aspect ratio and recompute the projection matrix.
-	mProj = Perspective(0.25f*(static_cast<float>(pi)),this->AspectRatio(), 1.0f, 1000.0f);
+	mProj = Perspective(0.5f*(static_cast<float>(pi)),this->AspectRatio(), 1.0f, 1000.0f);
 }
 
 void BoxApp::UpdateScene(float dt)
@@ -169,13 +168,13 @@ void BoxApp::UpdateScene(float dt)
 	Point4f target = Point4f(0.f, 0.f, 0.f, 1.f);
 	Point4f up = Point4f(0.0f, 1.0f, 0.0f, 0.0f);
 
-	mat4f mView = LookAt(pos, target, up);
+	mView = LookAt(pos, target, up);
 }
 
 void BoxApp::DrawScene()
 {
-	md3dImmediateContext->ClearRenderTargetView(mRenderTargetView, reinterpret_cast<const float*>(&Colors::LightSteelBlue));
-	md3dImmediateContext->ClearDepthStencilView(mDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+	md3dImmediateContext->ClearRenderTargetView(mRenderTargetView, reinterpret_cast<const float*>(&Colors::White[0]));
+	md3dImmediateContext->ClearDepthStencilView(mDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,1.0f, 0);
 
 	md3dImmediateContext->IASetInputLayout(mInputLayout);
 	md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -187,8 +186,7 @@ void BoxApp::DrawScene()
 
 	// Set constants
 	mat4f worldViewProj = mWorld*mView*mProj;
-
-	mfxWorldViewProj->SetMatrix(reinterpret_cast<float*>(&worldViewProj));
+	mfxWorldViewProj->SetMatrix(reinterpret_cast<float*>(&worldViewProj[0][0]));
 
 	D3DX11_TECHNIQUE_DESC techDesc;
 	mTech->GetDesc(&techDesc);
