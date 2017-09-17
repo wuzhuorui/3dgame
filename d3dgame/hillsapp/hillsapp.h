@@ -16,7 +16,6 @@
 #include"../common/math/mat4.h"
 #include"../common/math/transform.h"
 #include"../common/color/color.h"
-#include"../scene/gameobject/gameobject.h"
 
 class HillsApp :public D3DApp
 {
@@ -36,7 +35,9 @@ public:
 	ID3DX11EffectMatrixVariable* GetmfxWorldViewProj() {
 		return mfxWorldViewProj;
 	};
-
+	ID3DX11EffectTechnique* GetmTech() {
+		return mTech;
+	}
 private:
 	float GetHeight(float x, float z)const;
 	void BuildGeometryBuffers();
@@ -49,8 +50,6 @@ private:
 	ID3DX11EffectMatrixVariable* mfxWorldViewProj;
 
 	ID3D11InputLayout* mInputLayout;
-
-	GameObject root;
 
 	mat4f mView;
 	mat4f mProj;

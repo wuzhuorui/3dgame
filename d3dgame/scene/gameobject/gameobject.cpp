@@ -61,6 +61,13 @@ void GameObject::ClearScale()
 
 void GameObject::SetTranslation(float x, float y, float z)
 {
+	if (!Translation)
+	{
+		Translation.reset(new mat4f());
+		mFlag |= status::mTranslation;
+	}
+	*Translation = ::Translation(x, y, z);
+	mFlag |= status::mRelativeWorldDirty;
 }
 
 void GameObject::SetTranslation(std::shared_ptr<mat4f>& translation)
@@ -69,6 +76,8 @@ void GameObject::SetTranslation(std::shared_ptr<mat4f>& translation)
 
 void GameObject::ClearTranslation()
 {
+	Translation.reset();
+	mFlag &= status::mRelativeWorldDirty;
 }
 
 void GameObject::SetRotate()
@@ -97,7 +106,7 @@ std::shared_ptr<mat4f> GameObject::GetWorldMat()
 	return mRelativeWorld;
 }
 
-void GameObject::DrawScene(const mat4f& VP, const mat4f& ParentRelativeWorld)
+void GameObject::DrawScene(const mat4f& VP, const mat4f& ParentRelativeWorld, std::function<void(ID3DX11EffectTechnique*, ID3D11DeviceContext*)> fun)
 {
 	UINT offset = 0;
 	Mgr->Getmd3dImmediateContext()->IASetVertexBuffers(0, 1, &mVB, &VertexSize, &offset);
@@ -106,9 +115,26 @@ void GameObject::DrawScene(const mat4f& VP, const mat4f& ParentRelativeWorld)
 	mat4f WVP = mWorld*VP;
 
 	Mgr->GetmfxWorldViewProj()->SetMatrix(reinterpret_cast<float*>(&WVP[0][0]));
+	fun(Mgr->GetmTech(), Mgr->Getmd3dImmediateContext());
 
 	Mgr->Getmd3dImmediateContext()->DrawIndexed(IndexNum, 0, 0);
 
 	for (auto& child : mChildren)
-		child->DrawScene(VP, mWorld);
+		(child)->DrawScene(VP, mWorld,fun);
+}
+
+void GameObject::AddChild(const std::shared_ptr<GameObject>& child)
+{
+	mChildren.insert(mChildren.end(), child);
+}
+
+void GameObject::DeleteChild(const std::shared_ptr<GameObject>& child)
+{
+	for (auto elem = mChildren.begin() ;elem!=mChildren.end(); elem++)
+	{
+		if (*elem == child)
+		{
+			mChildren.erase(elem);
+		}
+	}
 }

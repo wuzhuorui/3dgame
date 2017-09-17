@@ -1,6 +1,7 @@
 #include"hillsapp.h"
 #include"../GeometryGenerator/GeometryGenerator.h"
 #include<cassert>
+#include<functional>
 struct Vertex
 {
 	Point3f Pos;
@@ -8,7 +9,7 @@ struct Vertex
 };
 
 HillsApp::HillsApp(HINSTANCE hInstance)
-	:D3DApp(hInstance), root(this),
+	:D3DApp(hInstance),
 	mFX(nullptr),mTech(nullptr),mfxWorldViewProj(nullptr),
 	mInputLayout(nullptr),mGridIndexCount(0),mTheta(1.5f*pi),
 	mPhi(0.1f*pi),mRadius(200.f)
@@ -70,8 +71,9 @@ void HillsApp::DrawScene()
 
 	for (UINT p = 0; p < techDesc.Passes; ++p)
 	{
-		mTech->GetPassByIndex(p)->Apply(0, md3dImmediateContext);
-		root.DrawScene(ViewProj, mat4f());
+		std::function<void(ID3DX11EffectTechnique*, ID3D11DeviceContext*)> fun = [p](ID3DX11EffectTechnique* mTech,
+			ID3D11DeviceContext* md3dImmediateContext) -> void { mTech->GetPassByIndex(p)->Apply(0, md3dImmediateContext); };
+		root.DrawScene(ViewProj, mat4f(),fun);
 	}
 
 	mSwapChain->Present(0, 0);
@@ -176,6 +178,12 @@ void HillsApp::BuildGeometryBuffers()
 	}
 	root.InitVB(sizeof(Vertex), vertices.size(), &vertices[0]);
 	root.InitIB(sizeof(UINT), mGridIndexCount, &grid.Indices[0]);
+
+	std::shared_ptr<GameObject> floor(new GameObject(this));
+	floor->SetTranslation(160.f, 0.f, 0.f);
+	floor->InitVB(sizeof(Vertex), vertices.size(), &vertices[0]);
+	floor->InitIB(sizeof(UINT), mGridIndexCount, &grid.Indices[0]);
+	root.AddChild(floor);
 }
 
 void HillsApp::BuildVertexLayout()

@@ -8,6 +8,7 @@
 #include"../common/debug/debug.h"
 #include"../common/utils/utils.h"
 #include"../common/lib/d3dx11effect.h"
+#include"../scene/gameobject/gameobject.h"
 
 class GameTimer;
 
@@ -34,8 +35,9 @@ public:
 	ID3D11Device* Getmd3dDevice() { return md3dDevice; };
 	ID3D11DeviceContext* Getmd3dImmediateContext() { return md3dImmediateContext; };
 
-	virtual ID3DX11EffectMatrixVariable* GetmfxWorldViewProj() = 0;
 
+	virtual ID3DX11EffectMatrixVariable* GetmfxWorldViewProj() = 0;
+	virtual ID3DX11EffectTechnique* GetmTech() = 0;
 protected:
 	bool InitMainWindow();
 	bool IniDirect3D();
@@ -64,4 +66,7 @@ protected:
 	int mClientHeight;
 
 	bool mEnable4xMsaa;
+
+	GameObject root;
+
 };

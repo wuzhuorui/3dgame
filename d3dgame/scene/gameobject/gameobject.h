@@ -1,4 +1,4 @@
-#pragma
+#pragma once
 #include<vector>
 #include<d3d11.h>
 #include"../../common/math/transform.h"
@@ -6,7 +6,7 @@
 #include"../../common/math/vec3.h"
 #include"../../common/math/vec2.h"
 #include<memory>
-
+#include<functional>
 class D3DApp;
 
 class GameObject
@@ -30,14 +30,16 @@ public:
 
 	std::shared_ptr<mat4f> GetWorldMat();
 
-	void DrawScene(const mat4f& VP,const mat4f& ParentRelativeWorld);
+	void DrawScene(const mat4f& VP,const mat4f& ParentRelativeWorld, std::function<void(struct ID3DX11EffectTechnique*,ID3D11DeviceContext*)> fun);
 
+	void AddChild(const std::shared_ptr<GameObject>& child);
+	void DeleteChild(const std::shared_ptr<GameObject>& child);
 private:
 	enum  status {
 		mVBOK = 0x1, mIBOK = 0x2, mScaleMat = 0x4, mTranslation = 0x8, mRotate = 0x10,
 		mRelativeWorldDirty = 0x20
 	};
-	std::vector<GameObject*> mChildren;
+	std::vector<std::shared_ptr<GameObject>> mChildren;
 	
 	ID3D11Buffer* mVB;
 	size_t VertexNum;
