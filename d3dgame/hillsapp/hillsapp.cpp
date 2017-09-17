@@ -8,7 +8,7 @@ struct Vertex
 };
 
 HillsApp::HillsApp(HINSTANCE hInstance)
-	:D3DApp(hInstance),mVB(nullptr),mIB(nullptr),
+	:D3DApp(hInstance), root(this),
 	mFX(nullptr),mTech(nullptr),mfxWorldViewProj(nullptr),
 	mInputLayout(nullptr),mGridIndexCount(0),mTheta(1.5f*pi),
 	mPhi(0.1f*pi),mRadius(200.f)
@@ -21,11 +21,8 @@ HillsApp::HillsApp(HINSTANCE hInstance)
 
 HillsApp::~HillsApp()
 {
-	using namespace CommonUtils;
-	Release(mVB);
-	Release(mIB);
-	Release(mFX);
-	Release(mInputLayout);
+	GlobalUtils->Release(mFX);
+	GlobalUtils->Release(mInputLayout);
 }
 
 bool HillsApp::Init()
@@ -66,22 +63,15 @@ void HillsApp::DrawScene()
 	md3dImmediateContext->IASetInputLayout(mInputLayout);
 	md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	UINT stride = sizeof(Vertex);
-	UINT offset = 0;
-
-	md3dImmediateContext->IASetVertexBuffers(0, 1, &mVB, &stride, &offset);
-	md3dImmediateContext->IASetIndexBuffer(mIB, DXGI_FORMAT_R32_UINT, 0);
-
-	mat4f WorldViewProj = mWorld*mView*mProj;
+	mat4f ViewProj = mView*mProj;
 
 	D3DX11_TECHNIQUE_DESC techDesc;
 	mTech->GetDesc(&techDesc);
 
 	for (UINT p = 0; p < techDesc.Passes; ++p)
 	{
-		mfxWorldViewProj->SetMatrix(&WorldViewProj[0][0]);
 		mTech->GetPassByIndex(p)->Apply(0, md3dImmediateContext);
-		md3dImmediateContext->DrawIndexed(mGridIndexCount, 0, 0);
+		root.DrawScene(ViewProj, mat4f());
 	}
 
 	mSwapChain->Present(0, 0);
@@ -184,26 +174,8 @@ void HillsApp::BuildGeometryBuffers()
 			vertices[i].Color = Color4f(1.0f, 1.0f, 1.0f, 1.0f);
 		}
 	}
-
-	D3D11_BUFFER_DESC vbd;
-	vbd.Usage = D3D11_USAGE_IMMUTABLE;
-	vbd.ByteWidth = sizeof(Vertex)*vertices.size();
-	vbd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	vbd.CPUAccessFlags = 0;
-	vbd.MiscFlags = 0;
-	D3D11_SUBRESOURCE_DATA vinitData;
-	vinitData.pSysMem = &vertices[0];
-	md3dDevice->CreateBuffer(&vbd, &vinitData, &mVB);
-
-	D3D11_BUFFER_DESC ibd;
-	ibd.Usage = D3D11_USAGE_IMMUTABLE;
-	ibd.ByteWidth = sizeof(UINT) * mGridIndexCount;
-	ibd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	ibd.CPUAccessFlags = 0;
-	ibd.MiscFlags = 0;
-	D3D11_SUBRESOURCE_DATA iinitData;
-	iinitData.pSysMem = &grid.Indices[0];
-	md3dDevice->CreateBuffer(&ibd, &iinitData, &mIB);
+	root.InitVB(sizeof(Vertex), vertices.size(), &vertices[0]);
+	root.InitIB(sizeof(UINT), mGridIndexCount, &grid.Indices[0]);
 }
 
 void HillsApp::BuildVertexLayout()

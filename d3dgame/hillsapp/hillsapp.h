@@ -15,9 +15,8 @@
 #include"../common/math/vec4.h"
 #include"../common/math/mat4.h"
 #include"../common/math/transform.h"
-#include"../common/lib/d3dx11effect.h"
 #include"../common/color/color.h"
-
+#include"../scene/gameobject/gameobject.h"
 
 class HillsApp :public D3DApp
 {
@@ -34,14 +33,16 @@ public:
 	void OnMouseUp(WPARAM btnState, int x, int y);
 	void OnMouseMove(WPARAM btnState, int x, int y);
 
+	ID3DX11EffectMatrixVariable* GetmfxWorldViewProj() {
+		return mfxWorldViewProj;
+	};
+
 private:
 	float GetHeight(float x, float z)const;
 	void BuildGeometryBuffers();
 	void BuildFX();
 	void BuildVertexLayout();
 private:
-	ID3D11Buffer* mVB;
-	ID3D11Buffer* mIB;
 
 	ID3DX11Effect* mFX;
 	ID3DX11EffectTechnique* mTech;
@@ -49,7 +50,8 @@ private:
 
 	ID3D11InputLayout* mInputLayout;
 
-	mat4f mWorld;
+	GameObject root;
+
 	mat4f mView;
 	mat4f mProj;
 

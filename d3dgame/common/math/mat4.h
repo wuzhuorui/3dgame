@@ -17,6 +17,12 @@ public:
 	mat4(const mat4& right) {
 		*this = right;
 	}
+	void Reset() {
+		val[0][0] = 1, val[0][1] = 0, val[0][2] = 0, val[0][3] = 0;
+		val[1][0] = 0, val[1][1] = 1, val[1][2] = 0, val[1][3] = 0;
+		val[2][0] = 0, val[2][1] = 0, val[2][2] = 1, val[2][3] = 0;
+		val[3][0] = 0, val[3][1] = 0, val[3][2] = 0, val[3][3] = 1;
+	}
 	const mat4 operator*(const mat4& right)const
 	{
 		mat4 ret;
@@ -32,6 +38,10 @@ public:
 			}
 		}
 		return ret;
+	}
+	const mat4& operator*=(const mat4& right)const
+	{
+
 	}
 	const mat4& transport() {
 		for(int i = 0 ; i < 4;i++)

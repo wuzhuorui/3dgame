@@ -7,6 +7,8 @@
 #include<memory>
 #include"../common/debug/debug.h"
 #include"../common/utils/utils.h"
+#include"../common/lib/d3dx11effect.h"
+
 class GameTimer;
 
 class D3DApp
@@ -28,6 +30,12 @@ public:
 	virtual void OnMouseDown(WPARAM btnState,int x,int y){};
 	virtual void OnMouseUp(WPARAM btnState,int x,int y){};
 	virtual void OnMouseMove(WPARAM btnState,int x,int y){};
+
+	ID3D11Device* Getmd3dDevice() { return md3dDevice; };
+	ID3D11DeviceContext* Getmd3dImmediateContext() { return md3dImmediateContext; };
+
+	virtual ID3DX11EffectMatrixVariable* GetmfxWorldViewProj() = 0;
+
 protected:
 	bool InitMainWindow();
 	bool IniDirect3D();

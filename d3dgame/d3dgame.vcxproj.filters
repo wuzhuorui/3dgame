@@ -87,6 +87,9 @@
     <ClInclude Include="GeometryGenerator\GeometryGenerator.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="scene\gameobject\gameobject.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="d3dapp\d3dapp.cpp">
@@ -126,6 +129,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="GeometryGenerator\GeometryGenerator.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\gameobject\gameobject.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
