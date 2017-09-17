@@ -73,7 +73,7 @@ public:
 	{
 		return Vec4(left.x()*right.x(), left.y()*right.y(), left.z()*right.z(), left.w()*right.w());
 	}
-	virtual ~Vec4() {};
+	~Vec4() {};
 
 	friend std::ostream& operator<<(std::ostream& out, const Vec4<T>& right)
 	{
@@ -101,3 +101,4 @@ typedef Vec4<int>    Vec4i;
 
 typedef Vec4f Color4f;
 typedef Vec4f Point4f;
+typedef Vec4f Dir4f;

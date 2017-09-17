@@ -72,7 +72,7 @@ public:
 	{
 		return Vec3(left.x()*right.x(), left.y()*right.y(), left.z()*right.z());
 	}
-	virtual ~Vec3() {};
+	~Vec3() {};
 
 	friend std::ostream& operator<<(std::ostream& out, const Vec3<T>& right)
 	{

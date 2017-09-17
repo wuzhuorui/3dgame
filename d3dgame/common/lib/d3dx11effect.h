@@ -22,7 +22,7 @@
 #define DCOMMON_H_INCLUDED
 #define NO_D3D11_DEBUG_NAME
 #else
-#include <d3d11_1.h>
+#include <d3d11.h>
 #include <d3d11shader.h>
 #endif
 

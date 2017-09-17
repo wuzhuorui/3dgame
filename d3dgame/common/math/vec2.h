@@ -8,7 +8,6 @@ public:
 	{
 		v[0] = x;
 		v[1] = y;
-		v[2] = z;
 	};
 	Vec2(const Vec2&right) {
 		*this = right;
@@ -65,7 +64,7 @@ public:
 	{
 		return Vec2(left.x()*right.x(), left.y()*right.y());
 	}
-	virtual ~Vec2() {};
+	~Vec2() {};
 
 	friend std::ostream& operator<<(std::ostream& out, const Vec2<T>& right)
 	{
