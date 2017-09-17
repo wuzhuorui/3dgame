@@ -5,7 +5,8 @@
 #include<D3Dcompiler.h>
 #include<string>
 #include<memory>
-
+#include"../common/debug/debug.h"
+#include"../common/utils/utils.h"
 class GameTimer;
 
 class D3DApp
