@@ -1,6 +1,14 @@
 #include"gameobject.h"
 #include"../../common/utils/utils.h"
 #include"../../d3dapp/d3dapp.h"
+#include"../../GeometryGenerator/GeometryGenerator.h"
+
+struct Vertex
+{
+	Point3f Pos;
+	Color4f Color;
+};
+
 GameObject::GameObject(D3DApp* mgr)
 	:mVB(0), mIB(0), mFlag(0),Mgr(mgr)
 {
@@ -12,6 +20,74 @@ GameObject::~GameObject()
 {
 	GlobalUtils->Release(mIB);
 	GlobalUtils->Release(mVB);
+	GlobalUtils->Release(mInputLayout);
+}
+
+void GameObject::BuildVertexLayout(UINT PassIndex)
+{
+	this->mPassIndex = PassIndex;
+	D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
+	{
+		{ "POSITION",0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA ,0 },
+		{ "COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	};
+
+	D3DX11_PASS_DESC passDesc;
+	Mgr->GetmTech()->GetPassByIndex(mPassIndex)->GetDesc(&passDesc);
+	Mgr->Getmd3dDevice()->CreateInputLayout(vertexDesc, 2, passDesc.pIAInputSignature,
+		passDesc.IAInputSignatureSize, &mInputLayout
+	);
+}
+
+void GameObject::BuildGeometryBuffers()
+{
+	GeometryGenerator::MeshData grid;
+
+	GeometryGenerator geoGen;
+
+	geoGen.CreateGrid(160.f, 160.f, 50, 50, grid);
+
+
+	int mGridIndexCount = grid.Indices.size();
+
+	std::vector<Vertex> vertices(grid.Vertices.size());
+	for (size_t i = 0; i < grid.Vertices.size(); ++i)
+	{
+		Point3f p = grid.Vertices[i].Position;
+
+		p[1] = GetHeight(p[0], p[2]);
+
+		vertices[i].Pos = p;
+
+		// Color the vertex based on its height.
+		if (p[1] < -10.0f)
+		{
+			// Sandy beach color.
+			vertices[i].Color = Color4f(1.0f, 0.96f, 0.62f, 1.0f);
+		}
+		else if (p[1] < 5.0f)
+		{
+			// Light yellow-green.
+			vertices[i].Color = Color4f(0.48f, 0.77f, 0.46f, 1.0f);
+		}
+		else if (p[1] < 12.0f)
+		{
+			// Dark yellow-green.
+			vertices[i].Color = Color4f(0.1f, 0.48f, 0.19f, 1.0f);
+		}
+		else if (p[1] < 20.0f)
+		{
+			// Dark brown
+			vertices[i].Color = Color4f(0.45f, 0.39f, 0.34f, 1.0f);
+		}
+		else
+		{
+			// White snow.
+			vertices[i].Color = Color4f(1.0f, 1.0f, 1.0f, 1.0f);
+		}
+	}
+	InitVB(sizeof(Vertex), vertices.size(), &vertices[0]);
+	InitIB(sizeof(UINT), mGridIndexCount, &grid.Indices[0]);
 }
 
 void GameObject::InitVB(size_t Vsize,size_t Vnum, const void *address)
@@ -108,6 +184,9 @@ std::shared_ptr<mat4f> GameObject::GetWorldMat()
 
 void GameObject::DrawScene(const mat4f& VP, const mat4f& ParentRelativeWorld, std::function<void(ID3DX11EffectTechnique*, ID3D11DeviceContext*)> fun)
 {
+	Mgr->Getmd3dImmediateContext()->IASetInputLayout(mInputLayout);
+	Mgr->Getmd3dImmediateContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
 	UINT offset = 0;
 	Mgr->Getmd3dImmediateContext()->IASetVertexBuffers(0, 1, &mVB, &VertexSize, &offset);
 	Mgr->Getmd3dImmediateContext()->IASetIndexBuffer(mIB, DXGI_FORMAT_R32_UINT, 0);
@@ -137,4 +216,9 @@ void GameObject::DeleteChild(const std::shared_ptr<GameObject>& child)
 			mChildren.erase(elem);
 		}
 	}
+}
+
+float GameObject::GetHeight(float x, float z)const
+{
+	return 0.3f*(z*sinf(0.1f*x) + x*cosf(0.1f*z));
 }

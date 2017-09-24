@@ -1,17 +1,12 @@
 #include"hillsapp.h"
-#include"../GeometryGenerator/GeometryGenerator.h"
 #include<cassert>
 #include<functional>
-struct Vertex
-{
-	Point3f Pos;
-	Color4f Color;
-};
+
 
 HillsApp::HillsApp(HINSTANCE hInstance)
 	:D3DApp(hInstance),
-	mFX(nullptr),mTech(nullptr),mfxWorldViewProj(nullptr),
-	mInputLayout(nullptr),mGridIndexCount(0),mTheta(1.5f*pi),
+	mFX(nullptr),mTech(nullptr),mfxWorldViewProj(nullptr)
+	,mTheta(1.5f*pi),
 	mPhi(0.1f*pi),mRadius(200.f)
 {
 	mMainWndCaption = L"Hills Demo";
@@ -23,7 +18,6 @@ HillsApp::HillsApp(HINSTANCE hInstance)
 HillsApp::~HillsApp()
 {
 	GlobalUtils->Release(mFX);
-	GlobalUtils->Release(mInputLayout);
 }
 
 bool HillsApp::Init()
@@ -60,9 +54,6 @@ void HillsApp::DrawScene()
 {
 	md3dImmediateContext->ClearRenderTargetView(mRenderTargetView, &Colors::LightSteelBlue[0]);
 	md3dImmediateContext->ClearDepthStencilView(mDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f,0);
-
-	md3dImmediateContext->IASetInputLayout(mInputLayout);
-	md3dImmediateContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	mat4f ViewProj = mView*mProj;
 
@@ -124,81 +115,20 @@ void HillsApp::OnMouseMove(WPARAM btnState, int x, int y)
 	mLastMousePos.SetY(y);
 }
 
-float HillsApp::GetHeight(float x, float z)const
-{
-	return 0.3f*(z*sinf(0.1f*x) + x*cosf(0.1f*z));
-}
 
 void HillsApp::BuildGeometryBuffers()
 {
-	GeometryGenerator::MeshData grid;
-
-	GeometryGenerator geoGen;
-
-	geoGen.CreateGrid(160.f, 160.f, 50, 50, grid);
-
-
-	mGridIndexCount = grid.Indices.size();
-
-	std::vector<Vertex> vertices(grid.Vertices.size());
-	for (size_t i = 0; i < grid.Vertices.size(); ++i)
-	{
-		Point3f p = grid.Vertices[i].Position;
-
-		p[1] = GetHeight(p[0], p[2]);
-
-		vertices[i].Pos = p;
-
-		// Color the vertex based on its height.
-		if (p[1] < -10.0f)
-		{
-			// Sandy beach color.
-			vertices[i].Color = Color4f(1.0f, 0.96f, 0.62f, 1.0f);
-		}
-		else if (p[1] < 5.0f)
-		{
-			// Light yellow-green.
-			vertices[i].Color = Color4f(0.48f, 0.77f, 0.46f, 1.0f);
-		}
-		else if (p[1] < 12.0f)
-		{
-			// Dark yellow-green.
-			vertices[i].Color = Color4f(0.1f, 0.48f, 0.19f, 1.0f);
-		}
-		else if (p[1] < 20.0f)
-		{
-			// Dark brown
-			vertices[i].Color = Color4f(0.45f, 0.39f, 0.34f, 1.0f);
-		}
-		else
-		{
-			// White snow.
-			vertices[i].Color = Color4f(1.0f, 1.0f, 1.0f, 1.0f);
-		}
-	}
-	root.InitVB(sizeof(Vertex), vertices.size(), &vertices[0]);
-	root.InitIB(sizeof(UINT), mGridIndexCount, &grid.Indices[0]);
-
-	std::shared_ptr<GameObject> floor(new GameObject(this));
+	root.BuildGeometryBuffers();
+	floor.reset(new GameObject(this));
 	floor->SetTranslation(160.f, 0.f, 0.f);
-	floor->InitVB(sizeof(Vertex), vertices.size(), &vertices[0]);
-	floor->InitIB(sizeof(UINT), mGridIndexCount, &grid.Indices[0]);
+	floor->BuildGeometryBuffers();
 	root.AddChild(floor);
 }
 
 void HillsApp::BuildVertexLayout()
 {
-	D3D11_INPUT_ELEMENT_DESC vertexDesc[] =
-	{
-		{"POSITION",0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA ,0},
-		{ "COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-	};
-
-	D3DX11_PASS_DESC passDesc;
-	mTech->GetPassByIndex(0)->GetDesc(&passDesc);
-	md3dDevice->CreateInputLayout(vertexDesc, 2, passDesc.pIAInputSignature,
-		passDesc.IAInputSignatureSize, &mInputLayout
-	);
+	root.BuildVertexLayout(0);
+	floor->BuildVertexLayout(0);
 }
 
 void HillsApp::BuildFX()

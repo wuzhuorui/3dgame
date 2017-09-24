@@ -39,7 +39,6 @@ public:
 		return mTech;
 	}
 private:
-	float GetHeight(float x, float z)const;
 	void BuildGeometryBuffers();
 	void BuildFX();
 	void BuildVertexLayout();
@@ -49,16 +48,13 @@ private:
 	ID3DX11EffectTechnique* mTech;
 	ID3DX11EffectMatrixVariable* mfxWorldViewProj;
 
-	ID3D11InputLayout* mInputLayout;
-
+	std::shared_ptr<class GameObject> floor;
 	mat4f mView;
 	mat4f mProj;
 
 	float mTheta;
 	float mPhi;
 	float mRadius;
-
-	UINT mGridIndexCount;
 
 	Point2i mLastMousePos;
 };

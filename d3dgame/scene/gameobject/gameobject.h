@@ -14,8 +14,8 @@ class GameObject
 public:
 	GameObject(D3DApp* mgr);
 	virtual ~GameObject();
-	void InitVB(size_t,size_t,const void*);
-	void InitIB(size_t,size_t, const void*);
+	void BuildVertexLayout(UINT PassIndex);
+	void BuildGeometryBuffers();
 	
 	void SetScale(float x,float y,float z);
 	void SetScale(std::shared_ptr<mat4f>& scale);
@@ -30,11 +30,16 @@ public:
 
 	std::shared_ptr<mat4f> GetWorldMat();
 
-	void DrawScene(const mat4f& VP,const mat4f& ParentRelativeWorld, std::function<void(struct ID3DX11EffectTechnique*,ID3D11DeviceContext*)> fun);
+	virtual void DrawScene(const mat4f& VP,const mat4f& ParentRelativeWorld, std::function<void(struct ID3DX11EffectTechnique*,ID3D11DeviceContext*)> fun);
 
 	void AddChild(const std::shared_ptr<GameObject>& child);
 	void DeleteChild(const std::shared_ptr<GameObject>& child);
 private:
+	float GetHeight(float x, float z)const;
+
+	void InitVB(size_t, size_t, const void*);
+	void InitIB(size_t, size_t, const void*);
+
 	enum  status {
 		mVBOK = 0x1, mIBOK = 0x2, mScaleMat = 0x4, mTranslation = 0x8, mRotate = 0x10,
 		mRelativeWorldDirty = 0x20
@@ -47,6 +52,9 @@ private:
 	ID3D11Buffer* mIB;
 	size_t IndexNum;
 	size_t IndexSize;
+
+	UINT mPassIndex;
+	ID3D11InputLayout* mInputLayout;
 
 	unsigned mFlag;
 	std::shared_ptr<mat4f> Scale;
