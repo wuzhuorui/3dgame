@@ -90,6 +90,12 @@
     <ClInclude Include="scene\gameobject\gameobject.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="common\shader\shader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="common\shader\colorshader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="d3dapp\d3dapp.cpp">
@@ -132,6 +138,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="scene\gameobject\gameobject.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="common\shader\shader.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="common\shader\colorshader.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

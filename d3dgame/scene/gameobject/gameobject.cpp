@@ -2,6 +2,8 @@
 #include"../../common/utils/utils.h"
 #include"../../d3dapp/d3dapp.h"
 #include"../../GeometryGenerator/GeometryGenerator.h"
+#include"../../common/shader/colorshader.h"
+#include"../../common/lib/d3dx11effect.h"
 
 struct Vertex
 {
@@ -9,8 +11,8 @@ struct Vertex
 	Color4f Color;
 };
 
-GameObject::GameObject(D3DApp* mgr)
-	:mVB(0), mIB(0), mFlag(0),Mgr(mgr)
+GameObject::GameObject(D3DApp* mgr, std::shared_ptr<class Shader> shader)
+	:mVB(0), mIB(0), mFlag(0),Mgr(mgr),mShader(shader)
 {
 	mRelativeWorld.reset(new mat4f());
 	mFlag &= status::mRelativeWorldDirty;
@@ -33,7 +35,8 @@ void GameObject::BuildVertexLayout(UINT PassIndex)
 	};
 
 	D3DX11_PASS_DESC passDesc;
-	Mgr->GetmTech()->GetPassByIndex(mPassIndex)->GetDesc(&passDesc);
+	ColorShader* cshader = (ColorShader*)&*mShader;
+	cshader->mTech->GetPassByIndex(mPassIndex)->GetDesc(&passDesc);
 	Mgr->Getmd3dDevice()->CreateInputLayout(vertexDesc, 2, passDesc.pIAInputSignature,
 		passDesc.IAInputSignatureSize, &mInputLayout
 	);
@@ -182,7 +185,7 @@ std::shared_ptr<mat4f> GameObject::GetWorldMat()
 	return mRelativeWorld;
 }
 
-void GameObject::DrawScene(const mat4f& VP, const mat4f& ParentRelativeWorld, std::function<void(ID3DX11EffectTechnique*, ID3D11DeviceContext*)> fun)
+void GameObject::DrawScene(const mat4f& VP, const mat4f& ParentRelativeWorld)
 {
 	Mgr->Getmd3dImmediateContext()->IASetInputLayout(mInputLayout);
 	Mgr->Getmd3dImmediateContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -192,14 +195,15 @@ void GameObject::DrawScene(const mat4f& VP, const mat4f& ParentRelativeWorld, st
 	Mgr->Getmd3dImmediateContext()->IASetIndexBuffer(mIB, DXGI_FORMAT_R32_UINT, 0);
 	mat4f mWorld = ParentRelativeWorld*(*this->GetWorldMat());
 	mat4f WVP = mWorld*VP;
+	ColorShader* cshader = (ColorShader*)&*mShader;
 
-	Mgr->GetmfxWorldViewProj()->SetMatrix(reinterpret_cast<float*>(&WVP[0][0]));
-	fun(Mgr->GetmTech(), Mgr->Getmd3dImmediateContext());
+	cshader->mfxWorldViewProj->SetMatrix(reinterpret_cast<float*>(&WVP[0][0]));
+	cshader->mTech->GetPassByIndex(this->mPassIndex)->Apply(0, Mgr->Getmd3dImmediateContext());
 
 	Mgr->Getmd3dImmediateContext()->DrawIndexed(IndexNum, 0, 0);
 
 	for (auto& child : mChildren)
-		(child)->DrawScene(VP, mWorld,fun);
+		(child)->DrawScene(VP, mWorld);
 }
 
 void GameObject::AddChild(const std::shared_ptr<GameObject>& child)

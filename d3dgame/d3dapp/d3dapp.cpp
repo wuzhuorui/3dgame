@@ -37,8 +37,7 @@ D3DApp::D3DApp(HINSTANCE hInstance)
 	mDepthStencilBuffer(nullptr),
 	mRenderTargetView(nullptr),
 	mDepthStencilView(nullptr),
-	mTimer(new GameTimer()),
-	root(this)
+	mTimer(new GameTimer())
 {
 	ZeroMemory(&mScreenViewport, sizeof(D3D11_VIEWPORT));
 	gd3dapp = this;

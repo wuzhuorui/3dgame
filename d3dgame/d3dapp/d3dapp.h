@@ -2,12 +2,10 @@
 #include<Windowsx.h>
 #include<d3d11.h>
 #include<D3DX11async.h>
-#include<D3Dcompiler.h>
 #include<string>
 #include<memory>
 #include"../common/debug/debug.h"
 #include"../common/utils/utils.h"
-#include"../common/lib/d3dx11effect.h"
 #include"../scene/gameobject/gameobject.h"
 
 class GameTimer;
@@ -35,9 +33,6 @@ public:
 	ID3D11Device* Getmd3dDevice() { return md3dDevice; };
 	ID3D11DeviceContext* Getmd3dImmediateContext() { return md3dImmediateContext; };
 
-
-	virtual ID3DX11EffectMatrixVariable* GetmfxWorldViewProj() = 0;
-	virtual ID3DX11EffectTechnique* GetmTech() = 0;
 protected:
 	bool InitMainWindow();
 	bool IniDirect3D();
@@ -50,7 +45,7 @@ protected:
 	bool 	  mMaximized;
 	bool	  mResizing;
 	UINT	  m4xMsaaQuality;
-	
+	std::vector<std::shared_ptr<class Shader>> mShader;
 	std::shared_ptr<GameTimer> mTimer;
 	ID3D11Device* md3dDevice;
 	ID3D11DeviceContext* md3dImmediateContext;
@@ -67,6 +62,6 @@ protected:
 
 	bool mEnable4xMsaa;
 
-	GameObject root;
+	std::shared_ptr<class GameObject> root;
 
 };

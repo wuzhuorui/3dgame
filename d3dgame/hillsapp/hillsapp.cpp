@@ -1,12 +1,11 @@
 #include"hillsapp.h"
 #include<cassert>
 #include<functional>
-
+#include"../common/shader/colorshader.h"
 
 HillsApp::HillsApp(HINSTANCE hInstance)
 	:D3DApp(hInstance),
-	mFX(nullptr),mTech(nullptr),mfxWorldViewProj(nullptr)
-	,mTheta(1.5f*pi),
+	mTheta(1.5f*pi),
 	mPhi(0.1f*pi),mRadius(200.f)
 {
 	mMainWndCaption = L"Hills Demo";
@@ -17,7 +16,6 @@ HillsApp::HillsApp(HINSTANCE hInstance)
 
 HillsApp::~HillsApp()
 {
-	GlobalUtils->Release(mFX);
 }
 
 bool HillsApp::Init()
@@ -26,9 +24,8 @@ bool HillsApp::Init()
 	{
 		return false;
 	}
-
-	BuildGeometryBuffers();
 	BuildFX();
+	BuildGeometryBuffers();
 	BuildVertexLayout();
 
 	return true;
@@ -57,15 +54,7 @@ void HillsApp::DrawScene()
 
 	mat4f ViewProj = mView*mProj;
 
-	D3DX11_TECHNIQUE_DESC techDesc;
-	mTech->GetDesc(&techDesc);
-
-	for (UINT p = 0; p < techDesc.Passes; ++p)
-	{
-		std::function<void(ID3DX11EffectTechnique*, ID3D11DeviceContext*)> fun = [p](ID3DX11EffectTechnique* mTech,
-			ID3D11DeviceContext* md3dImmediateContext) -> void { mTech->GetPassByIndex(p)->Apply(0, md3dImmediateContext); };
-		root.DrawScene(ViewProj, mat4f(),fun);
-	}
+	root->DrawScene(ViewProj, mat4f());
 
 	mSwapChain->Present(0, 0);
 }
@@ -118,43 +107,22 @@ void HillsApp::OnMouseMove(WPARAM btnState, int x, int y)
 
 void HillsApp::BuildGeometryBuffers()
 {
-	root.BuildGeometryBuffers();
-	floor.reset(new GameObject(this));
+	root.reset(new GameObject(this,mShader[0]));
+	root->BuildGeometryBuffers();
+	floor.reset(new GameObject(this,mShader[0]));
 	floor->SetTranslation(160.f, 0.f, 0.f);
 	floor->BuildGeometryBuffers();
-	root.AddChild(floor);
+	root->AddChild(floor);
 }
 
 void HillsApp::BuildVertexLayout()
 {
-	root.BuildVertexLayout(0);
+	root->BuildVertexLayout(0);
 	floor->BuildVertexLayout(0);
 }
 
 void HillsApp::BuildFX()
 {
-	DWORD shaderFlags = 0;
-#if defined( DEBUG ) || defined( _DEBUG )
-	shaderFlags |= D3D10_SHADER_DEBUG;
-	shaderFlags |= D3D10_SHADER_SKIP_OPTIMIZATION;
-#endif
-
-	ID3D10Blob* compiledShader = 0;
-	ID3D10Blob* compilationMsgs = 0;
-	HRESULT hr = D3DX11CompileFromFile(L"D:\\c++\\3dgame\\trunk\\d3dgame\\hillsapp\\color.fx", 0, 0, 0, "fx_5_0", shaderFlags,
-		0, 0, &compiledShader, &compilationMsgs, 0);
-	// compilationMsgs can store errors or warnings.
-	if (compilationMsgs != 0)
-	{
-		MessageBoxA(0, (char*)compilationMsgs->GetBufferPointer(), 0, 0);
-		if (compilationMsgs)compilationMsgs->Release();
-	}
-	assert(hr == S_OK);
-	assert(D3DX11CreateEffectFromMemory(compiledShader->GetBufferPointer(), compiledShader->GetBufferSize(),
-		0, md3dDevice, &mFX) == S_OK);
-
-	// Done with compiled shader.
-	if (compiledShader)compiledShader->Release();
-	mTech = mFX->GetTechniqueByName("ColorTech");
-	mfxWorldViewProj = mFX->GetVariableByName("gWorldViewProj")->AsMatrix();
+	mShader.push_back(std::shared_ptr<Shader>(new ColorShader()));
+	mShader[0]->BuildFX(md3dDevice);
 }

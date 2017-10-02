@@ -12,10 +12,10 @@ class D3DApp;
 class GameObject
 {
 public:
-	GameObject(D3DApp* mgr);
+	GameObject(D3DApp* mgr, std::shared_ptr<class Shader>);
 	virtual ~GameObject();
-	void BuildVertexLayout(UINT PassIndex);
-	void BuildGeometryBuffers();
+	virtual void BuildVertexLayout(UINT PassIndex);
+	virtual void BuildGeometryBuffers();
 	
 	void SetScale(float x,float y,float z);
 	void SetScale(std::shared_ptr<mat4f>& scale);
@@ -30,7 +30,7 @@ public:
 
 	std::shared_ptr<mat4f> GetWorldMat();
 
-	virtual void DrawScene(const mat4f& VP,const mat4f& ParentRelativeWorld, std::function<void(struct ID3DX11EffectTechnique*,ID3D11DeviceContext*)> fun);
+	virtual void DrawScene(const mat4f& VP,const mat4f& ParentRelativeWorld);
 
 	void AddChild(const std::shared_ptr<GameObject>& child);
 	void DeleteChild(const std::shared_ptr<GameObject>& child);
@@ -52,6 +52,8 @@ private:
 	ID3D11Buffer* mIB;
 	size_t IndexNum;
 	size_t IndexSize;
+
+	std::shared_ptr<class Shader> mShader;
 
 	UINT mPassIndex;
 	ID3D11InputLayout* mInputLayout;

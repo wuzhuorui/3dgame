@@ -31,23 +31,11 @@ public:
 	void OnMouseDown(WPARAM btnState, int x, int y);
 	void OnMouseUp(WPARAM btnState, int x, int y);
 	void OnMouseMove(WPARAM btnState, int x, int y);
-
-	ID3DX11EffectMatrixVariable* GetmfxWorldViewProj() {
-		return mfxWorldViewProj;
-	};
-	ID3DX11EffectTechnique* GetmTech() {
-		return mTech;
-	}
 private:
 	void BuildGeometryBuffers();
 	void BuildFX();
 	void BuildVertexLayout();
 private:
-
-	ID3DX11Effect* mFX;
-	ID3DX11EffectTechnique* mTech;
-	ID3DX11EffectMatrixVariable* mfxWorldViewProj;
-
 	std::shared_ptr<class GameObject> floor;
 	mat4f mView;
 	mat4f mProj;

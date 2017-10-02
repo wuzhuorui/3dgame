@@ -153,6 +153,8 @@
     <ClCompile Include="common\math\transform.cpp" />
     <ClCompile Include="common\math\vec3.cpp" />
     <ClCompile Include="common\math\vec4.cpp" />
+    <ClCompile Include="common\shader\colorshader.cpp" />
+    <ClCompile Include="common\shader\shader.cpp" />
     <ClCompile Include="common\timer\gametiemr.cpp" />
     <ClCompile Include="common\utils\utils.cpp" />
     <ClCompile Include="d3dapp\d3dapp.cpp">
@@ -177,6 +179,8 @@
     <ClInclude Include="common\math\vec2.h" />
     <ClInclude Include="common\math\vec3.h" />
     <ClInclude Include="common\math\vec4.h" />
+    <ClInclude Include="common\shader\colorshader.h" />
+    <ClInclude Include="common\shader\shader.h" />
     <ClInclude Include="common\timer\gametimer.h" />
     <ClInclude Include="common\utils\utils.h" />
     <ClInclude Include="d3dapp\d3dapp.h">
