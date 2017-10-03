@@ -155,6 +155,7 @@
     <ClCompile Include="common\math\vec4.cpp" />
     <ClCompile Include="common\shader\colorshader.cpp" />
     <ClCompile Include="common\shader\shader.cpp" />
+    <ClCompile Include="common\shader\watershader.cpp" />
     <ClCompile Include="common\timer\gametiemr.cpp" />
     <ClCompile Include="common\utils\utils.cpp" />
     <ClCompile Include="d3dapp\d3dapp.cpp">
@@ -164,6 +165,7 @@
     <ClCompile Include="hillsapp\hillsapp.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="scene\gameobject\gameobject.cpp" />
+    <ClCompile Include="scene\waterobject\waterobject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="boxapp\boxapp.h">
@@ -171,9 +173,11 @@
     </ClInclude>
     <ClInclude Include="common\color\color.h" />
     <ClInclude Include="common\debug\debug.h" />
+    <ClInclude Include="common\light\light.h" />
     <ClInclude Include="common\lua\luabase.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="common\material\material.h" />
     <ClInclude Include="common\math\mat4.h" />
     <ClInclude Include="common\math\transform.h" />
     <ClInclude Include="common\math\vec2.h" />
@@ -181,6 +185,7 @@
     <ClInclude Include="common\math\vec4.h" />
     <ClInclude Include="common\shader\colorshader.h" />
     <ClInclude Include="common\shader\shader.h" />
+    <ClInclude Include="common\shader\watershader.h" />
     <ClInclude Include="common\timer\gametimer.h" />
     <ClInclude Include="common\utils\utils.h" />
     <ClInclude Include="d3dapp\d3dapp.h">
@@ -189,6 +194,7 @@
     <ClInclude Include="GeometryGenerator\GeometryGenerator.h" />
     <ClInclude Include="hillsapp\hillsapp.h" />
     <ClInclude Include="scene\gameobject\gameobject.h" />
+    <ClInclude Include="scene\waterobject\waterobject.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

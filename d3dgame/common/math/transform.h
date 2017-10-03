@@ -42,3 +42,14 @@ const mat4<T> Translation(T x, T y, T z)
 	ret[3][0] = x;					  ret[3][1] = y;	    ret[3][2] = z;		  ret[3][3] = 1;
 	return ret;
 }
+
+template<typename T>
+const mat4<T> RotateY(T theta)
+{
+	mat4<T> ret;
+	ret[0][0] = cosf(theta);					  ret[0][1] = 0;		ret[0][2] = -sinf(theta);		  ret[0][3] = 0;
+	ret[1][0] = 0;								  ret[1][1] = 1;		ret[1][2] = 0;				      ret[1][3] = 0;
+	ret[2][0] = sinf(theta);					  ret[2][1] = 0;		ret[2][2] = cosf(theta);		  ret[2][3] = 0;
+	ret[3][0] = 0;								  ret[3][1] = 0;	    ret[3][2] = 0;					  ret[3][3] = 1;
+	return ret;
+}

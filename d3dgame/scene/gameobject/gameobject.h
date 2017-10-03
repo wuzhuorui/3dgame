@@ -16,7 +16,8 @@ public:
 	virtual ~GameObject();
 	virtual void BuildVertexLayout(UINT PassIndex);
 	virtual void BuildGeometryBuffers();
-	
+	virtual void DrawScene(const mat4f& VP, const mat4f& ParentRelativeWorld);
+	virtual void UpdateScene(float dt);
 	void SetScale(float x,float y,float z);
 	void SetScale(std::shared_ptr<mat4f>& scale);
 	void ClearScale();
@@ -25,16 +26,14 @@ public:
 	void SetTranslation(std::shared_ptr<mat4f>& translation);
 	void ClearTranslation();
 
-	void SetRotate();
+	void SetRotate(float theta);
 	void ClearRotate();
 
 	std::shared_ptr<mat4f> GetWorldMat();
 
-	virtual void DrawScene(const mat4f& VP,const mat4f& ParentRelativeWorld);
-
 	void AddChild(const std::shared_ptr<GameObject>& child);
 	void DeleteChild(const std::shared_ptr<GameObject>& child);
-private:
+protected:
 	float GetHeight(float x, float z)const;
 
 	void InitVB(size_t, size_t, const void*);
@@ -63,6 +62,8 @@ private:
 	std::shared_ptr<mat4f> Translation;
 	std::shared_ptr<mat4f> Rotate;
 	std::shared_ptr<mat4f> mRelativeWorld;
+
+
 	
 	D3DApp* Mgr;
 };

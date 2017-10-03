@@ -96,6 +96,18 @@
     <ClInclude Include="common\shader\colorshader.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="scene\waterobject\waterobject.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="common\shader\watershader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="common\material\material.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="common\light\light.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="d3dapp\d3dapp.cpp">
@@ -144,6 +156,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="common\shader\colorshader.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="scene\waterobject\waterobject.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="common\shader\watershader.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

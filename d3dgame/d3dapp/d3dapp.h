@@ -59,7 +59,6 @@ protected:
 	D3D_DRIVER_TYPE md3dDriverType;
 	int mClientWidth;
 	int mClientHeight;
-
 	bool mEnable4xMsaa;
 
 	std::shared_ptr<class GameObject> root;

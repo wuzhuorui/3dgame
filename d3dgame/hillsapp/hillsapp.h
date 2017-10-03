@@ -31,6 +31,7 @@ public:
 	void OnMouseDown(WPARAM btnState, int x, int y);
 	void OnMouseUp(WPARAM btnState, int x, int y);
 	void OnMouseMove(WPARAM btnState, int x, int y);
+	Vec3f GetEyePos() { return mEyePos; }
 private:
 	void BuildGeometryBuffers();
 	void BuildFX();
@@ -39,6 +40,11 @@ private:
 	std::shared_ptr<class GameObject> floor;
 	mat4f mView;
 	mat4f mProj;
+
+	Vec3f mEyePos;
+
+	ID3D11RasterizerState* mWireframeRS;
+
 
 	float mTheta;
 	float mPhi;

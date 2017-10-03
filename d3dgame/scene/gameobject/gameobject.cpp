@@ -159,8 +159,17 @@ void GameObject::ClearTranslation()
 	mFlag &= status::mRelativeWorldDirty;
 }
 
-void GameObject::SetRotate()
+void GameObject::SetRotate(float theta)
 {
+	static float m_rotate = 0.f;
+	m_rotate += theta;
+	if (!Rotate)
+	{
+		Rotate.reset(new mat4f());
+		mFlag |= status::mRotate;
+	}
+	*Rotate = ::RotateY(m_rotate);
+	mFlag |= status::mRelativeWorldDirty;
 }
 
 void GameObject::ClearRotate()
@@ -193,17 +202,24 @@ void GameObject::DrawScene(const mat4f& VP, const mat4f& ParentRelativeWorld)
 	UINT offset = 0;
 	Mgr->Getmd3dImmediateContext()->IASetVertexBuffers(0, 1, &mVB, &VertexSize, &offset);
 	Mgr->Getmd3dImmediateContext()->IASetIndexBuffer(mIB, DXGI_FORMAT_R32_UINT, 0);
-	mat4f mWorld = ParentRelativeWorld*(*this->GetWorldMat());
+	mat4f mWorld =(*this->GetWorldMat())*ParentRelativeWorld;
 	mat4f WVP = mWorld*VP;
 	ColorShader* cshader = (ColorShader*)&*mShader;
 
-	cshader->mfxWorldViewProj->SetMatrix(reinterpret_cast<float*>(&WVP[0][0]));
+	cshader->mfxWorldViewProj->SetMatrix(reinterpret_cast<float*>(&WVP));
 	cshader->mTech->GetPassByIndex(this->mPassIndex)->Apply(0, Mgr->Getmd3dImmediateContext());
 
 	Mgr->Getmd3dImmediateContext()->DrawIndexed(IndexNum, 0, 0);
 
 	for (auto& child : mChildren)
 		(child)->DrawScene(VP, mWorld);
+}
+
+void GameObject::UpdateScene(float dt)
+{
+	//this->SetRotate(dt);
+	for (auto& child : mChildren)
+		(child)->UpdateScene(dt);
 }
 
 void GameObject::AddChild(const std::shared_ptr<GameObject>& child)

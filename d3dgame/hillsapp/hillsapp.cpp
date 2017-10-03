@@ -2,7 +2,8 @@
 #include<cassert>
 #include<functional>
 #include"../common/shader/colorshader.h"
-
+#include"../common/shader/watershader.h"
+#include"../scene/waterobject/waterobject.h"
 HillsApp::HillsApp(HINSTANCE hInstance)
 	:D3DApp(hInstance),
 	mTheta(1.5f*pi),
@@ -16,6 +17,7 @@ HillsApp::HillsApp(HINSTANCE hInstance)
 
 HillsApp::~HillsApp()
 {
+	GlobalUtils->Release(mWireframeRS);
 }
 
 bool HillsApp::Init()
@@ -27,6 +29,15 @@ bool HillsApp::Init()
 	BuildFX();
 	BuildGeometryBuffers();
 	BuildVertexLayout();
+
+	D3D11_RASTERIZER_DESC wireframeDesc;
+	ZeroMemory(&wireframeDesc, sizeof(D3D11_RASTERIZER_DESC));
+	wireframeDesc.FillMode = D3D11_FILL_WIREFRAME;
+	wireframeDesc.CullMode = D3D11_CULL_BACK;
+	wireframeDesc.FrontCounterClockwise = false;
+	wireframeDesc.DepthClipEnable = true;
+
+	(md3dDevice->CreateRasterizerState(&wireframeDesc, &mWireframeRS));
 
 	return true;
 }
@@ -43,15 +54,24 @@ void HillsApp::UpdateScene(float dt)
 	float x = mRadius*sinf(mPhi)*cosf(mTheta);
 	float z = mRadius*sinf(mPhi)*sinf(mTheta);
 	float y = mRadius*cosf(mPhi);
-
+	mEyePos = Vec3f(x, y, z);
 	mView = LookAt(Point4f(x, y, z, 1), Point4f(0.f, 0.f, 0.f, 1.f), Dir4f(0.f, 1.f, 0.f, 0.f));
+
+	root->UpdateScene(dt);
+	mShader[0]->UpdateScene(dt, this);
+	mShader[1]->UpdateScene(dt, this);
+
 }
 
 void HillsApp::DrawScene()
 {
 	md3dImmediateContext->ClearRenderTargetView(mRenderTargetView, &Colors::LightSteelBlue[0]);
 	md3dImmediateContext->ClearDepthStencilView(mDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.f,0);
-
+	
+	//md3dImmediateContext->RSSetState(mWireframeRS);
+	
+	mShader[0]->DrawScene();
+	mShader[1]->DrawScene();
 	mat4f ViewProj = mView*mProj;
 
 	root->DrawScene(ViewProj, mat4f());
@@ -109,7 +129,7 @@ void HillsApp::BuildGeometryBuffers()
 {
 	root.reset(new GameObject(this,mShader[0]));
 	root->BuildGeometryBuffers();
-	floor.reset(new GameObject(this,mShader[0]));
+	floor.reset(new WaterObject(this,mShader[1]));
 	floor->SetTranslation(160.f, 0.f, 0.f);
 	floor->BuildGeometryBuffers();
 	root->AddChild(floor);
@@ -123,6 +143,9 @@ void HillsApp::BuildVertexLayout()
 
 void HillsApp::BuildFX()
 {
-	mShader.push_back(std::shared_ptr<Shader>(new ColorShader()));
+	mShader.push_back(std::shared_ptr<Shader>(new ColorShader(L"D:\\c++\\3dgame\\trunk\\d3dgame\\hillsapp\\color.fx")));
 	mShader[0]->BuildFX(md3dDevice);
+	mShader.push_back(std::shared_ptr<Shader>(new WaterShader(L"D:\\c++\\3dgame\\trunk\\d3dgame\\shader\\Lighting.fx")));
+	mShader[1]->BuildFX(md3dDevice);
+
 }
